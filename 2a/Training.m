@@ -36,6 +36,9 @@ layers = [
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
+layers(2).CellState = ones(314,1);
+layers(2).HiddenState= ones(314,1);
+
 options = trainingOptions('adam', ...
     'ExecutionEnvironment','auto', ...
     'LearnRateSchedule','piecewise', ...
