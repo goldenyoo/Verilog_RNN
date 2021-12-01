@@ -36,15 +36,16 @@ YTrain = categorical(YTrain);
 YValidation = categorical(YValidation);
 
 %% 
+m = 30;
 layers = [
     sequenceInputLayer(22,"Name","sequence")
-    lstmLayer(16,"Name","lstm","OutputMode","last")
+    lstmLayer(m,"Name","lstm","OutputMode","last")
     fullyConnectedLayer(2,"Name","fc1")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
-layers(2).CellState = ones(16,1);
-layers(2).HiddenState= ones(16,1);
+layers(2).CellState = ones(m,1);
+layers(2).HiddenState= ones(m,1);
 
 options = trainingOptions('adam', ...
     'ExecutionEnvironment','auto', ...

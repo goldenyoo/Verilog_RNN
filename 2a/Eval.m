@@ -54,13 +54,14 @@ for i = 1:length(Class_unknown)
 end
 
 %% 
+m = 30;
 for i = 1:length(Class_1)
-   [XTest_1{i+c1,1}, XTest_2{i+c1,1}, XTest_3{i+c1,1}] = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),16);
+   [XTest_1{i+c1,1}, XTest_2{i+c1,1}, XTest_3{i+c1,1}] = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),m);
    YTest(i+c1,1) = 1;
 end
 
 for i = 1:length(Class_2)
-   [XTest_1{i+length(Class_1)+c1,1}, XTest_2{i+length(Class_1)+c1,1}, XTest_3{i+length(Class_1)+c1,1}] = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),16);
+   [XTest_1{i+length(Class_1)+c1,1}, XTest_2{i+length(Class_1)+c1,1}, XTest_3{i+length(Class_1)+c1,1}] = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),m);
    YTest(i+length(Class_1)+c1,1) = 2;
 end
 
