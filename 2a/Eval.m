@@ -55,12 +55,12 @@ end
 
 %% 
 for i = 1:length(Class_1)
-   XTest{i+c1,1} = my_normalization(s(Class_1(i):Class_1(i)+313,1:22))';
+   [XTest_1{i+c1,1}, XTest_2{i+c1,1}, XTest_3{i+c1,1}] = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),16);
    YTest(i+c1,1) = 1;
 end
 
 for i = 1:length(Class_2)
-   XTest{i+length(Class_1)+c1,1} = my_normalization(s(Class_2(i):Class_2(i)+313,1:22))';
+   [XTest_1{i+length(Class_1)+c1,1}, XTest_2{i+length(Class_1)+c1,1}, XTest_3{i+length(Class_1)+c1,1}] = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),16);
    YTest(i+length(Class_1)+c1,1) = 2;
 end
 
@@ -76,8 +76,37 @@ load(FILENAME);
 
 
 
-YPred = classify(net,XTest, ...
-    'SequenceLength','longest');
+YPred_1 = classify(net_1,XTest_1,'SequenceLength','longest');
+YPred_2 = classify(net_2,XTest_2,'SequenceLength','longest');
+YPred_3 = classify(net_3,XTest_3,'SequenceLength','longest');
+
+for k = 1:length(YPred_1)
+    L = 0;
+    R = 0;
+    if YPred_1(k) == categorical(1)
+       L = L + 1; 
+    elseif YPred_1(k) == categorical(2)
+        R = R + 1;
+    end
+    if YPred_2(k) == categorical(1)
+       L = L + 1; 
+    elseif YPred_2(k) == categorical(2)
+        R = R + 1;
+    end
+    if YPred_3(k) == categorical(1)
+       L = L + 1; 
+    elseif YPred_3(k) == categorical(2)
+        R = R + 1;
+    end
+    
+    if L > R
+        YPred(k,1) = 1;
+    else
+        YPred(k,1) = 2;
+    end
+end
+
+YPred = categorical(YPred);
 
 acc = sum(YPred == YTest)./numel(YTest);
 disp(sprintf('Score: %f  ',acc));
@@ -88,4 +117,31 @@ function n_signal = my_normalization(s)
     Std = std(s);
     
     n_signal = (s - Mean)./Std;
+end
+
+function [A,M,C] = my_hjorth(s,m)
+    q = floor(length(s)/m);
+    A = [];
+    M = [];
+    C = [];
+    O = [];
+    for k = 1:m
+       tmp_s = s((k-1)*q+1:k*q,:);
+       a = var(tmp_s);
+       dif_y = diff(tmp_s);
+       m = (var(dif_y)./a).^(0.5);
+       dif_yy = diff(tmp_s,2);
+       c = (var(dif_yy)./a).^(0.5);
+       
+       A = [A; std(tmp_s)];
+       M = [M; m];
+       C = [C; c];
+       
+    end
+    
+    A = A';
+    M = M';
+    C = C';
+    O = [A M C];
+    
 end

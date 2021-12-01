@@ -67,22 +67,22 @@ for data_label = data_labels
     %% 
 
     for i = 1:length(Class_1)
-       X1(:,:,i+c1) = my_normalization(s(Class_1(i):Class_1(i)+313,1:22));
+       [X1_1(:,:,i+c1), X1_2(:,:,i+c1), X1_3(:,:,i+c1)] = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),16);
        Y1(i+c1,1) = 1;
     end
 
     for i = 1:length(Class_2)
-       X2(:,:,i+c2) = my_normalization(s(Class_2(i):Class_2(i)+313,1:22));
+       [X2_1(:,:,i+c2), X2_2(:,:,i+c2), X2_3(:,:,i+c2)] = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),16);
        Y2(i+c2,1) = 2;
     end
 
     for i = 1:length(Class_3)
-       X3(:,:,i+c3) = my_normalization(s(Class_3(i):Class_3(i)+313,1:22));
+       [X3_1(:,:,i+c3), X3_2(:,:,i+c3), X3_3(:,:,i+c3)] = my_hjorth(s(Class_3(i):Class_3(i)+313,1:22),16);
        Y3(i+c3,1) = 3;
     end
 
     for i = 1:length(Class_4)
-       X4(:,:,i+c4) = my_normalization(s(Class_4(i):Class_4(i)+313,1:22));
+       [X4_1(:,:,i+c4), X4_2(:,:,i+c4), X4_3(:,:,i+c4)] = my_hjorth(s(Class_4(i):Class_4(i)+313,1:22),16);
        Y4(i+c4,1) = 4;
     end
     c1 = c1 + length(Class_1);
@@ -91,7 +91,7 @@ for data_label = data_labels
     c4 = c4 + length(Class_4);
 end
 %% 
-save("D:\바탕화면\Verilog RNN\my_git_folder\2a\Calib_data_a.mat",'X1','X2','X3','X4','Y1','Y2', 'Y3', 'Y4');
+save("D:\바탕화면\Verilog RNN\my_git_folder\2a\Calib_data_a.mat",'X1_1','X1_2','X1_3','X2_1','X2_2','X2_3','X3_1','X3_2','X3_3','X4_1','X4_2','X4_3','Y1','Y2', 'Y3', 'Y4');
 
 %% 
 function n_signal = my_normalization(s)
@@ -99,4 +99,28 @@ function n_signal = my_normalization(s)
     Std = std(s);
     
     n_signal = (s - Mean)./Std;
+end
+
+function [A, M, C] = my_hjorth(s,m)
+    q = floor(length(s)/m);
+    A = [];
+    M = [];
+    C = [];
+    O = [];
+    for k = 1:m
+       tmp_s = s((k-1)*q+1:k*q,:);
+       a = var(tmp_s);
+       dif_y = diff(tmp_s);
+       m = (var(dif_y)./a).^(0.5);
+       dif_yy = diff(tmp_s,2);
+       c = (var(dif_yy)./a).^(0.5);
+       
+       A = [A; std(tmp_s)];
+       M = [M; m];
+       C = [C; c];
+       
+    end
+    
+    O = [A M C];
+    
 end
