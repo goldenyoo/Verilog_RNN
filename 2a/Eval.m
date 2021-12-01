@@ -74,7 +74,17 @@ for i = 1:length(Class_2)
    YTest(i+length(Class_1)+c1,1) = 2;
 end
 
-c1 = c1 + length(Class_1) + length(Class_2);
+for i = 1:length(Class_3)
+   XTest{i+length(Class_1)+length(Class_2)+c1,1} = my_normalization(s(Class_3(i):Class_3(i)+313,1:22))';
+   YTest(i+length(Class_1)+length(Class_2)+c1,1) = 3;
+end
+
+% for i = 1:length(Class_4)
+%    XTest{i+length(Class_1)+length(Class_2)+length(Class_3)+c1,1} = my_normalization(s(Class_4(i):Class_4(i)+313,1:22))';
+%    YTest(i+length(Class_1)+length(Class_2)+length(Class_3)+c1,1) = 4;
+% end
+
+c1 = c1 + length(Class_1) + length(Class_2) + length(Class_3); % + length(Class_4);
 end
 YTest = categorical(YTest);
 

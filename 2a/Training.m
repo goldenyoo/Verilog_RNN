@@ -6,8 +6,8 @@ FILENAME = 'D:\바탕화면\Verilog RNN\my_git_folder\2a\Calib_data_a.mat';
 load(FILENAME);
 
 %% Using X1, X2 (Left hand vs Right hand)
-tmp_X = cat(3,X1,X2);
-tmp_Y = [Y1;Y2];
+tmp_X = cat(3,X1,X2,X3);
+tmp_Y = [Y1;Y2; Y3];
 
 idx = randperm(size(tmp_X,3));
 train_it = 1;
@@ -32,7 +32,13 @@ YValidation = categorical(YValidation);
 layers = [
     sequenceInputLayer(22,"Name","sequence")
     lstmLayer(314,"Name","lstm","OutputMode","last")
-    fullyConnectedLayer(2,"Name","fc")
+    fullyConnectedLayer(240,"Name","fc_2")
+    reluLayer("Name","relu_1")
+    dropoutLayer(0.5,"Name","dropout_1")
+    fullyConnectedLayer(50,"Name","fc_3")
+    reluLayer("Name","relu_2")
+    dropoutLayer(0.5,"Name","dropout_2")
+    fullyConnectedLayer(3,"Name","fc_1")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
@@ -42,6 +48,7 @@ layers(2).HiddenState= ones(314,1);
 options = trainingOptions('adam', ...
     'ExecutionEnvironment','auto', ...
     'LearnRateSchedule','piecewise', ...
+    'LearnRateDropPeriod',15, ...
     'MiniBatchSize',64, ...
     'MaxEpochs',60, ...
     'ValidationData',{XValidation,YValidation}, ...
