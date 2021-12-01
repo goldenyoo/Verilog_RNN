@@ -65,24 +65,24 @@ for data_label = data_labels
         Class_4(cc4) = [];
     end
     %% 
-
+    m = 30;
     for i = 1:length(Class_1)
-       X1(:,:,i+c1) = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),16);
+       X1(:,:,i+c1) = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),m);
        Y1(i+c1,1) = 1;
     end
 
     for i = 1:length(Class_2)
-       X2(:,:,i+c2) = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),16);
+       X2(:,:,i+c2) = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),m);
        Y2(i+c2,1) = 2;
     end
 
     for i = 1:length(Class_3)
-       X3(:,:,i+c3) = my_hjorth(s(Class_3(i):Class_3(i)+313,1:22),16);
+       X3(:,:,i+c3) = my_hjorth(s(Class_3(i):Class_3(i)+313,1:22),m);
        Y3(i+c3,1) = 3;
     end
 
     for i = 1:length(Class_4)
-       X4(:,:,i+c4) = my_hjorth(s(Class_4(i):Class_4(i)+313,1:22),16);
+       X4(:,:,i+c4) = my_hjorth(s(Class_4(i):Class_4(i)+313,1:22),m);
        Y4(i+c4,1) = 4;
     end
     c1 = c1 + length(Class_1);
