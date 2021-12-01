@@ -55,12 +55,12 @@ end
 
 %% 
 for i = 1:length(Class_1)
-   XTest{i+c1,1} = my_normalization(s(Class_1(i):Class_1(i)+313,1:22))';
+   XTest{i+c1,1} = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),16)';
    YTest(i+c1,1) = 1;
 end
 
 for i = 1:length(Class_2)
-   XTest{i+length(Class_1)+c1,1} = my_normalization(s(Class_2(i):Class_2(i)+313,1:22))';
+   XTest{i+length(Class_1)+c1,1} = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),16)';
    YTest(i+length(Class_1)+c1,1) = 2;
 end
 
@@ -88,4 +88,28 @@ function n_signal = my_normalization(s)
     Std = std(s);
     
     n_signal = (s - Mean)./Std;
+end
+
+function [O] = my_hjorth(s,m)
+    q = floor(length(s)/m);
+    A = [];
+    M = [];
+    C = [];
+    O = [];
+    for k = 1:m
+       tmp_s = s((k-1)*q+1:k*q,:);
+       a = var(tmp_s);
+       dif_y = diff(tmp_s);
+       m = (var(dif_y)./a).^(0.5);
+       dif_yy = diff(tmp_s,2);
+       c = (var(dif_yy)./a).^(0.5);
+       
+       A = [A; std(tmp_s)];
+       M = [M; m];
+       C = [C; c];
+       
+    end
+    
+    O = [A M C];
+    
 end
