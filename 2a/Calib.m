@@ -95,6 +95,7 @@ save("D:\바탕화면\Verilog RNN\my_git_folder\2a\Calib_data_a.mat",'X1','X2','
 
 %% 
 function n_signal = my_normalization(s)
+    assert(isempty(find(isnan(s))))
     Mean = mean(s);
     Std = std(s);
     

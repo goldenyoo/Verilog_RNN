@@ -21,6 +21,16 @@ load(FILENAME);
 FILENAME1 = strcat('D:\바탕화면\BCIIV_2a_mat\true_labels\A0',data_label,'E.mat');
 load(FILENAME1);
 
+% NaN 제거, 바로 이전 data point로 대체
+tmp = ~isfinite(s);
+for i = 1:size(tmp,1)
+    for j = 1:size(tmp,2)
+        if tmp(i,j) == 1
+            s(i,j) = s(i-1,j);
+        end
+    end
+end
+
 %% 
 
 Class_unknown = [];
@@ -84,6 +94,8 @@ disp(sprintf('Score: %f  ',acc));
     
 %% 
 function n_signal = my_normalization(s)
+    assert(isempty(find(isnan(s))));
+    
     Mean = mean(s);
     Std = std(s);
     
