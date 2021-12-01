@@ -1,3 +1,3 @@
 # Verilog_RNN
 ## main
-Accurcy: 67%
+- Accurcy: 67%
