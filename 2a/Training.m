@@ -14,7 +14,7 @@ train_it = 1;
 dev_it = 1;
 
 for k = 1: size(tmp_X,3)
-    if k < size(tmp_X,3)*0.9
+    if k < size(tmp_X,3)*0.8
         XTrain{train_it,1} = tmp_X(:,:,idx(k))';
         YTrain(train_it,1) = tmp_Y(idx(k));
         train_it = train_it + 1;
@@ -34,19 +34,18 @@ m = 30;
 layers = [
     sequenceInputLayer(66,"Name","sequence")
     lstmLayer(m,"Name","lstm","OutputMode","last")
-    fullyConnectedLayer(2,"Name","fc1")
+    fullyConnectedLayer(2,"Name","fc_1")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
-layers(2).CellState = ones(m,1);
-layers(2).HiddenState= ones(m,1);
+% layers(2).CellState = ones(m,1);
+% layers(2).HiddenState= ones(m,1);
 
 options = trainingOptions('adam', ...
     'ExecutionEnvironment','auto', ...
     'LearnRateSchedule','piecewise', ...
-    'LearnRateDropPeriod',30, ...
-    'MiniBatchSize',64, ...
-    'MaxEpochs',120, ...
+    'LearnRateDropPeriod',100, ...
+    'MaxEpochs',150, ...
     'ValidationData',{XValidation,YValidation}, ...
     'Shuffle','every-epoch', ...   % "once', 'never', 'every-epoch'
     'Verbose',1, ...
