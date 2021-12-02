@@ -9,6 +9,7 @@ clear all
 clc
 
 data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9']; 
+% data_labels = ['9']; 
 
 c1 = 0;
 c2 = 0;
@@ -64,17 +65,16 @@ for i = 1:length(Class_unknown)
 end
 
 %% 
-for i = 1:length(Class_1)
-   XTest{i+c1,1} = my_normalization(s(Class_1(i):Class_1(i)+313,1:22))';
-   YTest(i+c1,1) = 1;
+Class_mix = [Class_1 Class_2; ones(1,length(Class_1)) ones(1,length(Class_2))*2];
+[B, I] = sort(Class_mix(1,:),2);
+label = Class_mix(2,I);
+
+for i = 1:length(B)
+   XTest{i+c1,1} = my_normalization(s(B(i):B(i)+313,1:22))';
+   YTest(i+c1,1) = label(i);
 end
 
-for i = 1:length(Class_2)
-   XTest{i+length(Class_1)+c1,1} = my_normalization(s(Class_2(i):Class_2(i)+313,1:22))';
-   YTest(i+length(Class_1)+c1,1) = 2;
-end
-
-c1 = c1 + length(Class_1) + length(Class_2);
+c1 = c1 + length(B);
 end
 YTest = categorical(YTest);
 
