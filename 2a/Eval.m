@@ -9,7 +9,7 @@ clear all
 % clc
 
 % data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-data_labels = ['1'];
+data_labels = ['8'];
 
 c1 = 0;
 c2 = 0;
@@ -106,8 +106,15 @@ b2 = (net.Layers(6).Bias);
 W3 = (net.Layers(9).Weights);
 b3 = (net.Layers(9).Bias);
 
-learning_rate = 0.001;
+
 back_cnt = 0;
+
+dW3 = 0; db3 = 0;
+dW2 = 0; db2 = 0;
+dW1 = 0; db1 = 0;
+dW_ux = 0; dW_fx = 0; dW_cx = 0; dW_ox = 0;
+dW_ua = 0; dW_fa = 0; dW_ca = 0; dW_oa = 0;
+db_u = 0; db_f = 0; db_c = 0; db_o = 0;
 
 for i = 1:length(XTest)
     test_x = XTest{i,1};
@@ -165,8 +172,9 @@ for i = 1:length(XTest)
     end
     
     % Backpropagation
-    if (i < 100) && ( YTest(i,1) ~= categorical(ypred(i,1)))
+    if (i < 50) %&& ( YTest(i,1) ~= categorical(ypred(i,1)))
         back_cnt = back_cnt + 1;
+        
         if YTest(i,1) == categorical(1)
             t = [1;0];
         else
@@ -177,32 +185,37 @@ for i = 1:length(XTest)
         back1 = (A3 - t);
         
         % fc
-        dW3 = back1 * A2';
-        db3 = back1;
+        ddW3 = back1 * A2';
+        ddb3 = back1;
         back2 = W3' * back1;
+        
+        dW3 = dW3 + ddW3;
+        db3 = db3 + ddb3; 
         
         % ReLu
         back2(find(A2)) = 0;
         
         % fc
-        dW2 = back2 * A1';
-        db2 = back2;
+        ddW2 = back2 * A1';
+        ddb2 = back2;
         back3 = W2' * back2;
+        
+        dW2 = dW2 + ddW2;
+        db2 = db2 + ddb2;
         
         % ReLu
         back3(find(A1)) = 0;
         
         % fc
-        dW1 = back3 * a_next';
-        db1 = back3;
+        ddW1 = back3 * a_next';
+        ddb1 = back3;
+        
+        dW1 = dW1 + ddW1;
+        db1 = db1 + ddb1;
         
         % LSTM backpropagation
         dc_next = zeros(314,1);
-        da_next = W1' * back3;
-        
-        dW_ux = 0; dW_fx = 0; dW_cx = 0; dW_ox = 0;
-        dW_ua = 0; dW_fa = 0; dW_ca = 0; dW_oa = 0;
-        db_u = 0; db_f = 0; db_c = 0; db_o = 0;
+        da_next = W1' * back3;       
         
         for back_itr = 314:-1:1
             xt = test_x(:,back_itr);
@@ -226,36 +239,35 @@ for i = 1:length(XTest)
             db_o = db_o + ddb_o;
         end
         
+    elseif i < 51
+        learning_rate = 1;
         % Update
-        W3 = W3 - learning_rate * dW3;
-        b3 = b3 - learning_rate * db3;
+        W3 = W3 - 0.1* (dW3/back_cnt); %0.1
+        b3 = b3 - 0.1* (db3/back_cnt); %0.1
         
-        W2 = W2 - learning_rate * dW2;
-        b2 = b2 - learning_rate * db2;
+        W2 = W2 - 0.1* (dW2/back_cnt); % 1 or 0.1
+        b2 = b2 - 0.1* (db2/back_cnt); % 1 or 0.1
         
-        W1 = W1 - learning_rate * dW1;
-        b1 = b1 - learning_rate * db1;
+        W1 = W1 - 0.1* (dW1/back_cnt); % 1 or 0.1 ?
+        b1 = b1 - 0.1* (db1/back_cnt); % 1 or 0.1
         
         %Update
-        W_ux = W_ux - learning_rate * dW_ux;
-        W_fx = W_fx - learning_rate * dW_fx;
-        W_cx = W_cx - learning_rate * dW_cx;
-        W_ox = W_ox - learning_rate * dW_ox;
+        W_ux = W_ux - 1* (dW_ux/back_cnt); % 1 or 10?
+        W_fx = W_fx - 1* (dW_fx/back_cnt);
+        W_cx = W_cx - 1* (dW_cx/back_cnt);
+        W_ox = W_ox - 1* (dW_ox/back_cnt);
         
-        W_ua = W_ua - learning_rate * dW_ua;
-        W_fa = W_fa - learning_rate * dW_fa;
-        W_ca = W_ca - learning_rate * dW_ca;
-        W_oa = W_oa - learning_rate * dW_oa;
+        W_ua = W_ua - 1* (dW_ua/back_cnt); % 1 or 10?
+        W_fa = W_fa - 1* (dW_fa/back_cnt);
+        W_ca = W_ca - 1* (dW_ca/back_cnt);
+        W_oa = W_oa - 1* (dW_oa/back_cnt);
         
-        b_u = b_u - learning_rate * db_u;
-        b_f = b_f - learning_rate * db_f;
-        b_c = b_c - learning_rate * db_c;
-        b_o = b_o - learning_rate * db_o;
-        
+        b_u = b_u - 1* (db_u/back_cnt);
+        b_f = b_f - 1* (db_f/back_cnt);
+        b_c = b_c - 1* (db_c/back_cnt);
+        b_o = b_o - 1* (db_o/back_cnt);
     end
-    
-    
-    
+
     
 end
 
@@ -264,8 +276,11 @@ YPred = categorical(ypred);
 
 YPred_net = classify(net,XTest,'SequenceLength','longest');
 
-acc = sum(YPred == YTest)./numel(YTest);
-disp(sprintf('Score: %f  ',acc));
+acc_net = sum(YPred_net(50:end) == YTest(50:end))./numel(YTest(50:end));
+acc = sum(YPred(50:end) == YTest(50:end))./numel(YTest(50:end));
+
+fprintf('original net: %f  \n',acc_net);
+fprintf('backpropagation: %f  \n',acc);
 
 %%
 function n_signal = my_normalization(s)
