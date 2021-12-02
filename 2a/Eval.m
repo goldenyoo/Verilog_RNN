@@ -6,7 +6,7 @@
 %
 % ----------------------------------------------------------------------- %
 clear all
-clc
+% clc
 
 % data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 data_labels = ['1'];
@@ -106,6 +106,9 @@ b2 = (net.Layers(6).Bias);
 W3 = (net.Layers(9).Weights);
 b3 = (net.Layers(9).Bias);
 
+learning_rate = 0.001;
+back_cnt = 0;
+
 for i = 1:length(XTest)
     test_x = XTest{i,1};
     a_next = ones(314 ,1);
@@ -161,6 +164,99 @@ for i = 1:length(XTest)
         ypred(i,1) = 2;
     end
     
+    % Backpropagation
+    if (i < 100) && ( YTest(i,1) ~= categorical(ypred(i,1)))
+        back_cnt = back_cnt + 1;
+        if YTest(i,1) == categorical(1)
+            t = [1;0];
+        else
+            t = [0;1];
+        end
+        
+        % softmax
+        back1 = (A3 - t);
+        
+        % fc
+        dW3 = back1 * A2';
+        db3 = back1;
+        back2 = W3' * back1;
+        
+        % ReLu
+        back2(find(A2)) = 0;
+        
+        % fc
+        dW2 = back2 * A1';
+        db2 = back2;
+        back3 = W2' * back2;
+        
+        % ReLu
+        back3(find(A1)) = 0;
+        
+        % fc
+        dW1 = back3 * a_next';
+        db1 = back3;
+        
+        % LSTM backpropagation
+        dc_next = zeros(314,1);
+        da_next = W1' * back3;
+        
+        dW_ux = 0; dW_fx = 0; dW_cx = 0; dW_ox = 0;
+        dW_ua = 0; dW_fa = 0; dW_ca = 0; dW_oa = 0;
+        db_u = 0; db_f = 0; db_c = 0; db_o = 0;
+        
+        for back_itr = 100:-1:1
+            xt = test_x(:,back_itr);
+            [da_prev, dc_prev, ddW_ux, ddW_fx, ddW_cx, ddW_ox, ddW_ua, ddW_fa, ddW_ca, ddW_oa, ddb_u, ddb_f, ddb_c, ddb_o] = lstm_cell_back(da_next, dc_next, lstm_units{back_itr,1}, xt,W_ux,W_fx,W_ox,W_cx,W_ua,W_fa,W_oa,W_ca);
+            da_next = da_prev;
+            dc_next = dc_prev;
+            
+            dW_ux = dW_ux + ddW_ux;
+            dW_fx = dW_fx + ddW_fx;
+            dW_cx = dW_cx + ddW_cx;
+            dW_ox = dW_ox + ddW_ox;
+            
+            dW_ua = dW_ua + ddW_ua;
+            dW_fa = dW_fa + ddW_fa;
+            dW_ca = dW_ca + ddW_ca;
+            dW_oa = dW_oa + ddW_oa;
+            
+            db_u = db_u + ddb_u;
+            db_f = db_f + ddb_f;
+            db_c = db_c + ddb_c;
+            db_o = db_o + ddb_o;
+        end
+        
+        % Update
+        W3 = W3 - learning_rate * dW3;
+        b3 = b3 - learning_rate * db3;
+        
+        W2 = W2 - learning_rate * dW2;
+        b2 = b2 - learning_rate * db2;
+        
+        W1 = W1 - learning_rate * dW1;
+        b1 = b1 - learning_rate * db1;
+        
+        %Update
+        W_ux = W_ux - learning_rate * dW_ux;
+        W_fx = W_fx - learning_rate * dW_fx;
+        W_cx = W_cx - learning_rate * dW_cx;
+        W_ox = W_ox - learning_rate * dW_ox;
+        
+        W_ua = W_ua - learning_rate * dW_ua;
+        W_fa = W_fa - learning_rate * dW_fa;
+        W_ca = W_ca - learning_rate * dW_ca;
+        W_oa = W_oa - learning_rate * dW_oa;
+        
+        b_u = b_u - learning_rate * db_u;
+        b_f = b_f - learning_rate * db_f;
+        b_c = b_c - learning_rate * db_c;
+        b_o = b_o - learning_rate * db_o;
+        
+    end
+    
+    
+    
+    
 end
 
 YPred = categorical(ypred);
@@ -209,15 +305,15 @@ c_tmp = lstm_unit.c_tmp;
 
 dpeter = (1-tanh(c_next).^2).*G_o.*da_next;
 
-%     dut = (dc_next.*c_tmp + c_tmp.*dpeter).*G_u .*(1 - G_u);
-%     dft = (dc_next.*c_prev + c_prev.*dpeter).*G_f.*(1 - G_f);
-%     dct = (dc_next.*G_u + G_u.*dpeter).*(1 - c_tmp.^2);
-%     dot = da_next.*tanh(c_next).*G_o.*(1 - G_o);
-
-dut = (c_tmp.*dpeter).*G_u .*(1 - G_u);
-dft = ( c_prev.*dpeter).*G_f.*(1 - G_f);
-dct = (G_u.*dpeter).*(1 - c_tmp.^2);
+dut = (dc_next.*c_tmp + c_tmp.*dpeter).*G_u .*(1 - G_u);
+dft = (dc_next.*c_prev + c_prev.*dpeter).*G_f.*(1 - G_f);
+dct = (dc_next.*G_u + G_u.*dpeter).*(1 - c_tmp.^2);
 dot = da_next.*tanh(c_next).*G_o.*(1 - G_o);
+
+% dut = (c_tmp.*dpeter).*G_u .*(1 - G_u);
+% dft = ( c_prev.*dpeter).*G_f.*(1 - G_f);
+% dct = (G_u.*dpeter).*(1 - c_tmp.^2);
+% dot = da_next.*tanh(c_next).*G_o.*(1 - G_o);
 
 db_u = (dut);
 db_f = (dft);
