@@ -8,8 +8,8 @@
 clear all
 clc
 
-data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9']; 
-% data_labels = ['9']; 
+% data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9']; 
+data_labels = ['9']; 
 
 c1 = 0;
 c2 = 0;
