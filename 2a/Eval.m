@@ -204,7 +204,7 @@ for i = 1:length(XTest)
         dW_ua = 0; dW_fa = 0; dW_ca = 0; dW_oa = 0;
         db_u = 0; db_f = 0; db_c = 0; db_o = 0;
         
-        for back_itr = 100:-1:1
+        for back_itr = 314:-1:1
             xt = test_x(:,back_itr);
             [da_prev, dc_prev, ddW_ux, ddW_fx, ddW_cx, ddW_ox, ddW_ua, ddW_fa, ddW_ca, ddW_oa, ddb_u, ddb_f, ddb_c, ddb_o] = lstm_cell_back(da_next, dc_next, lstm_units{back_itr,1}, xt,W_ux,W_fx,W_ox,W_cx,W_ua,W_fa,W_oa,W_ca);
             da_next = da_prev;
@@ -262,7 +262,7 @@ end
 YPred = categorical(ypred);
 %%
 
-% YPred = classify(net,XTest,'SequenceLength','longest');
+YPred_net = classify(net,XTest,'SequenceLength','longest');
 
 acc = sum(YPred == YTest)./numel(YTest);
 disp(sprintf('Score: %f  ',acc));
