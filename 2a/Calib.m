@@ -9,6 +9,7 @@ clear all
 clc
 
 data_labels = ['1','2', '3', '4', '5', '6','7', '8', '9'];
+% data_labels = ['1'];
 
 c1 = 0;
 c2 = 0;
@@ -64,8 +65,26 @@ for data_label = data_labels
         Class_3(cc3) = [];
         Class_4(cc4) = [];
     end
+    
+    %% Augmentation
+    
+    for j = length(Class_1):-1:1
+        Class_1 = [Class_1 Class_1(j)-5  Class_1(j)+5];
+    end
+    
+    for j = length(Class_2):-1:1
+        Class_2 = [Class_2 Class_2(j)-5  Class_2(j)+5];
+    end
+    
+    for j = length(Class_3):-1:1
+        Class_3 = [Class_3 Class_3(j)-5  Class_3(j)+5];
+    end
+    
+    for j = length(Class_4):-1:1
+        Class_4 = [Class_4 Class_4(j)-5  Class_4(j)+5];
+    end
     %% 
-    m = 30;
+    m = 16;
     for i = 1:length(Class_1)
        [X1_1(:,:,i+c1), X1_2(:,:,i+c1), X1_3(:,:,i+c1)] = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),m);
        Y1(i+c1,1) = 1;

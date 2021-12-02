@@ -17,7 +17,7 @@ train_it = 1;
 dev_it = 1;
 
 for k = 1: size(tmp_X_1,3)
-    if k < size(tmp_X_1,3)*0.9
+    if k < size(tmp_X_1,3)*0.8
         XTrain_1{train_it,1} = tmp_X_1(:,:,idx(k))';
         XTrain_2{train_it,1} = tmp_X_2(:,:,idx(k))';
         XTrain_3{train_it,1} = tmp_X_3(:,:,idx(k))';
@@ -36,11 +36,13 @@ YTrain = categorical(YTrain);
 YValidation = categorical(YValidation);
 
 %% 
-m = 30;
+m = 16;
 layers = [
     sequenceInputLayer(22,"Name","sequence")
     lstmLayer(m,"Name","lstm","OutputMode","last")
-    fullyConnectedLayer(2,"Name","fc1")
+    fullyConnectedLayer(10,"Name","fc1")
+    fullyConnectedLayer(10,"Name","fc2")
+    fullyConnectedLayer(2,"Name","fc3")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
