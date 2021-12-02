@@ -6,8 +6,8 @@ FILENAME = 'D:\바탕화면\Verilog RNN\my_git_folder\2a\Calib_data_a.mat';
 load(FILENAME);
 
 %% Using X1, X2 (Left hand vs Right hand)
-tmp_X = cat(3,X1,X2,X3);
-tmp_Y = [Y1;Y2; Y3];
+tmp_X = cat(3,X1,X2,X3,X4);
+tmp_Y = [Y1;Y2; Y3; Y4];
 
 idx = randperm(size(tmp_X,3));
 train_it = 1;
@@ -38,7 +38,7 @@ layers = [
     fullyConnectedLayer(50,"Name","fc_3")
     reluLayer("Name","relu_2")
     dropoutLayer(0.5,"Name","dropout_2")
-    fullyConnectedLayer(3,"Name","fc_1")
+    fullyConnectedLayer(4,"Name","fc_1")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
