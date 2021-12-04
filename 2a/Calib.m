@@ -84,24 +84,25 @@ for data_label = data_labels
         Class_4 = [Class_4 Class_4(j)-5  Class_4(j)+5];
     end
     %% 
+
     m = 16;
     for i = 1:length(Class_1)
-       [X1_1(:,:,i+c1), X1_2(:,:,i+c1), X1_3(:,:,i+c1)] = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),m);
+       [X1_1(:,:,i+c1), X1_2(:,:,i+c1), X1_3(:,:,i+c1)] = my_hjorth(s(Class_1(i):Class_1(i)+313,[2 6 7 8 9 11 12 13 14 18]),m);
        Y1(i+c1,1) = 1;
     end
 
     for i = 1:length(Class_2)
-       [X2_1(:,:,i+c2), X2_2(:,:,i+c2), X2_3(:,:,i+c2)] = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),m);
+       [X2_1(:,:,i+c2), X2_2(:,:,i+c2), X2_3(:,:,i+c2)] = my_hjorth(s(Class_2(i):Class_2(i)+313,[2 6 7 8 9 11 12 13 14 18]),m);
        Y2(i+c2,1) = 2;
     end
 
     for i = 1:length(Class_3)
-       [X3_1(:,:,i+c3), X3_2(:,:,i+c3), X3_3(:,:,i+c3)] = my_hjorth(s(Class_3(i):Class_3(i)+313,1:22),m);
+       [X3_1(:,:,i+c3), X3_2(:,:,i+c3), X3_3(:,:,i+c3)] = my_hjorth(s(Class_3(i):Class_3(i)+313,[2 6 7 8 9 11 12 13 14 18]),m);
        Y3(i+c3,1) = 3;
     end
 
     for i = 1:length(Class_4)
-       [X4_1(:,:,i+c4), X4_2(:,:,i+c4), X4_3(:,:,i+c4)] = my_hjorth(s(Class_4(i):Class_4(i)+313,1:22),m);
+       [X4_1(:,:,i+c4), X4_2(:,:,i+c4), X4_3(:,:,i+c4)] = my_hjorth(s(Class_4(i):Class_4(i)+313,[2 6 7 8 9 11 12 13 14 18]),m);
        Y4(i+c4,1) = 4;
     end
     c1 = c1 + length(Class_1);
@@ -110,7 +111,7 @@ for data_label = data_labels
     c4 = c4 + length(Class_4);
 end
 %% 
-save("D:\바탕화면\Verilog RNN\my_git_folder\2a\Calib_data_a.mat",'X1_1','X1_2','X1_3','X2_1','X2_2','X2_3','X3_1','X3_2','X3_3','X4_1','X4_2','X4_3','Y1','Y2', 'Y3', 'Y4');
+git 
 
 %% 
 function n_signal = my_normalization(s)

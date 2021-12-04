@@ -38,7 +38,7 @@ YValidation = categorical(YValidation);
 %% 
 m = 16;
 layers = [
-    sequenceInputLayer(22,"Name","sequence")
+    sequenceInputLayer(10,"Name","sequence")
     lstmLayer(m,"Name","lstm","OutputMode","last")
     fullyConnectedLayer(10,"Name","fc1")
     fullyConnectedLayer(10,"Name","fc2")
