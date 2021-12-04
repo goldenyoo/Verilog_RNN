@@ -9,7 +9,7 @@ clear all
 clc
 
 % data_labels = ['1','2', '3', '4', '5', '6','7', '8', '9'];
-data_labels = ['8'];
+data_labels = ['2'];
 
 c1 = 0;
 c2 = 0;
@@ -20,9 +20,13 @@ c4 = 0;
 for data_label = data_labels
     
     FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'T_2_mat');
+    load(FILENAME, 'h');
+    
+    FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\2a\ICA_A0',data_label,'T.mat');
     load(FILENAME);
 
-
+    s = ALLEEG(2).data';
+    
     %% Calculate covariance for all Classes
     Class_1 = [];
     Class_2 = [];

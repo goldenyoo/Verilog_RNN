@@ -9,15 +9,21 @@ clear all
 % clc
 
 % data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-data_labels = ['8'];
+data_labels = ['2'];
 
 c1 = 0;
 c2 = 0;
 
 for data_label = data_labels
     
-    FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'E_mat');
+    FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\2a\ICA_A0',data_label,'E.mat');
     load(FILENAME);
+
+    s = ALLEEG(2).data';
+    
+    
+    FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'E_mat');
+    load(FILENAME, 'h');
     
     FILENAME1 = strcat('D:\바탕화면\BCIIV_2a_mat\true_labels\A0',data_label,'E.mat');
     load(FILENAME1);
@@ -276,9 +282,21 @@ YPred = categorical(ypred);
 
 YPred_net = classify(net,XTest,'SequenceLength','longest');
 
+
+acc_net = sum(YPred_net == YTest)./numel(YTest);
+acc = sum(YPred == YTest)./numel(YTest);
+
+fprintf('data label: %s\n',data_label);
+fprintf('Total data \n');
+fprintf('original net: %f  \n',acc_net);
+fprintf('backpropagation: %f  \n',acc);
+
+
+
 acc_net = sum(YPred_net(50:end) == YTest(50:end))./numel(YTest(50:end));
 acc = sum(YPred(50:end) == YTest(50:end))./numel(YTest(50:end));
 
+fprintf('Part of data \n');
 fprintf('original net: %f  \n',acc_net);
 fprintf('backpropagation: %f  \n',acc);
 
