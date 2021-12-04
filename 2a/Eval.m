@@ -8,8 +8,8 @@
 clear all
 % clc
 
-% data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-data_labels = ['2'];
+data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+% data_labels = ['2'];
 
 c1 = 0;
 c2 = 0;
@@ -76,7 +76,7 @@ for data_label = data_labels
     label = Class_mix(2,I);
     
     for i = 1:length(B)
-        XTest{i+c1,1} = my_normalization(s(B(i):B(i)+313,1:22))';
+        XTest{i+c1,1} = my_hjorth(s(B(i):B(i)+313,[2 6 7 8 9 11 12 13 14 18]),30)';
         YTest(i+c1,1) = label(i);
     end
     
@@ -124,10 +124,10 @@ db_u = 0; db_f = 0; db_c = 0; db_o = 0;
 
 for i = 1:length(XTest)
     test_x = XTest{i,1};
-    a_next = ones(314 ,1);
-    c_next = ones(314 ,1);
+    a_next = zeros(30 ,1);
+    c_next = zeros(30 ,1);
     
-    for t = 1:314
+    for t = 1:30
         xt =  test_x(:,t);
         a_prev = a_next;
         c_prev = c_next;
@@ -220,10 +220,11 @@ for i = 1:length(XTest)
         db1 = db1 + ddb1;
         
         % LSTM backpropagation
-        dc_next = zeros(314,1);
+        
+        dc_next = zeros(30,1);
         da_next = W1' * back3;       
         
-        for back_itr = 314:-1:1
+        for back_itr = 30:-1:1
             xt = test_x(:,back_itr);
             [da_prev, dc_prev, ddW_ux, ddW_fx, ddW_cx, ddW_ox, ddW_ua, ddW_fa, ddW_ca, ddW_oa, ddb_u, ddb_f, ddb_c, ddb_o] = lstm_cell_back(da_next, dc_next, lstm_units{back_itr,1}, xt,W_ux,W_fx,W_ox,W_cx,W_ua,W_fa,W_oa,W_ca);
             da_next = da_prev;
@@ -366,4 +367,27 @@ dW_oa = dot * a_prev';
 da_prev = W_ua'*dut + W_fa'*dft + W_ca'*dct + W_oa'*dot;
 
 dc_prev = dc_next.*dft + dot.*(1-tanh(c_next).^2).*dft.*da_next;
+end
+function [O] = my_hjorth(s,m)
+    q = floor(length(s)/m);
+    A = [];
+    M = [];
+    C = [];
+    O = [];
+    for k = 1:m
+       tmp_s = s((k-1)*q+1:k*q,:);
+       a = var(tmp_s);
+       dif_y = diff(tmp_s);
+       m = (var(dif_y)./a).^(0.5);
+       dif_yy = diff(tmp_s,2);
+       c = (var(dif_yy)./a).^(0.5);
+       
+       A = [A; std(tmp_s)];
+       M = [M; m];
+       C = [C; c];
+       
+    end
+    
+    O = [A M C];
+    
 end

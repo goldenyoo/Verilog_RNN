@@ -14,7 +14,7 @@ train_it = 1;
 dev_it = 1;
 
 for k = 1: size(tmp_X,3)
-    if k < size(tmp_X,3)*0.9
+    if k < size(tmp_X,3)*0.8
         XTrain{train_it,1} = tmp_X(:,:,idx(k))';
         YTrain(train_it,1) = tmp_Y(idx(k));
         train_it = train_it + 1;
@@ -29,29 +29,26 @@ YTrain = categorical(YTrain);
 YValidation = categorical(YValidation);
 
 %% 
+m = 30;
+
 layers = [
-    sequenceInputLayer(22,"Name","sequence")
-    lstmLayer(314,"Name","lstm","OutputMode","last")
-    fullyConnectedLayer(240,"Name","fc_2")
+    sequenceInputLayer(30,"Name","sequence")
+    lstmLayer(30,"Name","lstm","OutputMode","last")
+    fullyConnectedLayer(10,"Name","fc_2")
     reluLayer("Name","relu_1")
     dropoutLayer(0.5,"Name","dropout_1")
-    fullyConnectedLayer(50,"Name","fc_3")
+    fullyConnectedLayer(10,"Name","fc_3")
     reluLayer("Name","relu_2")
     dropoutLayer(0.5,"Name","dropout_2")
     fullyConnectedLayer(2,"Name","fc_1")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
-
-
-layers(2).CellState = ones(314,1);
-layers(2).HiddenState= ones(314,1);
-
 options = trainingOptions('adam', ...
     'ExecutionEnvironment','auto', ...
     'LearnRateSchedule','piecewise', ...
-    'MiniBatchSize',64, ...
-    'MaxEpochs',60, ...
+    'LearnRateDropPeriod',150, ...
+    'MaxEpochs',300, ...
     'ValidationData',{XValidation,YValidation}, ...
     'Shuffle','every-epoch', ...   % "once', 'never', 'every-epoch'
     'Verbose',1, ...
