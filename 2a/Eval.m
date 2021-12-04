@@ -8,19 +8,24 @@
 clear all
 clc
 
-% data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-data_labels = ['1'];
+data_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+% data_labels = ['1'];
 
 c1 = 0;
 c2 = 0;
 
 for data_label = data_labels
+  FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\2a\ICA_A0',data_label,'E.mat');
+    load(FILENAME);
 
-FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'E_mat');
-load(FILENAME);
-
-FILENAME1 = strcat('D:\바탕화면\BCIIV_2a_mat\true_labels\A0',data_label,'E.mat');
-load(FILENAME1);
+    s = ALLEEG(2).data';
+    
+    
+    FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'E_mat');
+    load(FILENAME, 'h');
+    
+    FILENAME1 = strcat('D:\바탕화면\BCIIV_2a_mat\true_labels\A0',data_label,'E.mat');
+    load(FILENAME1);
 
 %% 
 
@@ -57,12 +62,12 @@ end
 %% 
 m = 16;
 for i = 1:length(Class_1)
-   [XTest_1{i+c1,1}, XTest_2{i+c1,1}, XTest_3{i+c1,1}] = my_hjorth(s(Class_1(i):Class_1(i)+313,1:22),m);
+   [XTest_1{i+c1,1}, XTest_2{i+c1,1}, XTest_3{i+c1,1}] = my_hjorth(s(Class_1(i):Class_1(i)+313,[2 6 7 8 9 11 12 13 14 18]),m);
    YTest(i+c1,1) = 1;
 end
 
 for i = 1:length(Class_2)
-   [XTest_1{i+length(Class_1)+c1,1}, XTest_2{i+length(Class_1)+c1,1}, XTest_3{i+length(Class_1)+c1,1}] = my_hjorth(s(Class_2(i):Class_2(i)+313,1:22),m);
+   [XTest_1{i+length(Class_1)+c1,1}, XTest_2{i+length(Class_1)+c1,1}, XTest_3{i+length(Class_1)+c1,1}] = my_hjorth(s(Class_2(i):Class_2(i)+313,[2 6 7 8 9 11 12 13 14 18]),m);
    YTest(i+length(Class_1)+c1,1) = 2;
 end
 

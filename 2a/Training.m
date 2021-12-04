@@ -40,14 +40,12 @@ m = 16;
 layers = [
     sequenceInputLayer(10,"Name","sequence")
     lstmLayer(m,"Name","lstm","OutputMode","last")
-    fullyConnectedLayer(10,"Name","fc1")
-    fullyConnectedLayer(10,"Name","fc2")
     fullyConnectedLayer(2,"Name","fc3")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
-layers(2).CellState = ones(m,1);
-layers(2).HiddenState= ones(m,1);
+% layers(2).CellState = ones(m,1);
+% layers(2).HiddenState= ones(m,1);
 
 options = trainingOptions('adam', ...
     'ExecutionEnvironment','auto', ...

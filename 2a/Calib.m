@@ -8,8 +8,8 @@
 clear all
 clc
 
-data_labels = ['1','2', '3', '4', '5', '6','7', '8', '9'];
-% data_labels = ['1'];
+% data_labels = ['1','2', '3', '4', '5', '6','7', '8', '9'];
+data_labels = ['1'];
 
 c1 = 0;
 c2 = 0;
@@ -19,8 +19,13 @@ c4 = 0;
 
 for data_label = data_labels
     
-    FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'T_2_mat');
+     FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'T_2_mat');
+    load(FILENAME, 'h');
+    
+    FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\2a\ICA_A0',data_label,'T.mat');
     load(FILENAME);
+
+    s = ALLEEG(2).data';
 
 
     %% Calculate covariance for all Classes
@@ -111,7 +116,7 @@ for data_label = data_labels
     c4 = c4 + length(Class_4);
 end
 %% 
-git 
+save("D:\바탕화면\Verilog RNN\my_git_folder\2a\Calib_data_a.mat",'X1_1', 'X1_2', 'X1_3','X2_1', 'X2_2', 'X2_3','X3_1', 'X3_2', 'X3_3','X4_1', 'X4_2', 'X4_3','Y1','Y2', 'Y3', 'Y4');
 
 %% 
 function n_signal = my_normalization(s)
