@@ -47,15 +47,10 @@ for data_label = data_labels
         
     
     for i = 1:length(mrk.pos)
-%         fprintf("pos: %d\n",i);
-        for k = 0:step:300       
-            if mod(k,100) == 0
-%                 fprintf("step: %d",k);
-            end
-            E = cnt_c(:,mrk.pos(1,i)+(k):mrk.pos(1,i)+chunk+k);
-            
-            
 
+        for k = 0:step:300       
+           
+            E = cnt_c(:,mrk.pos(1,i)+(k):mrk.pos(1,i)+chunk+k);
             X(:,:,it) = E;
 
             % According to its class, divide calculated covariance
