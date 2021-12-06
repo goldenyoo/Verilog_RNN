@@ -47,30 +47,6 @@ ref = 33;
     load(FILENAME);
     
     true_y = downsample(true_y,10);
-    %%
-    load("D:\바탕화면\Verilog RNN\my_git_folder\1a\net.mat");
-    
-    W_ux = net.Layers(2).InputWeights(1:length(net.Layers(2).InputWeights)/4,:);
-    W_fx = net.Layers(2).InputWeights(length(net.Layers(2).InputWeights)/4+1:length(net.Layers(2).InputWeights)*2/4,:);
-    W_cx = net.Layers(2).InputWeights(length(net.Layers(2).InputWeights)*2/4+1:length(net.Layers(2).InputWeights)*3/4,:);
-    W_ox = net.Layers(2).InputWeights(length(net.Layers(2).InputWeights)*3/4+1:length(net.Layers(2).InputWeights)*4/4,:);
-    W_ua = net.Layers(2).RecurrentWeights(1:length(net.Layers(2).RecurrentWeights)/4,:);
-    W_fa = net.Layers(2).RecurrentWeights(length(net.Layers(2).RecurrentWeights)/4+1:length(net.Layers(2).RecurrentWeights)*2/4,:);
-    W_ca = net.Layers(2).RecurrentWeights(length(net.Layers(2).RecurrentWeights)*2/4+1:length(net.Layers(2).RecurrentWeights)*3/4,:);
-    W_oa = net.Layers(2).RecurrentWeights(length(net.Layers(2).RecurrentWeights)*3/4+1:length(net.Layers(2).RecurrentWeights)*4/4,:);
-    b_u  = net.Layers(2).Bias(1:length(net.Layers(2).Bias)/4,:);
-    b_f  = net.Layers(2).Bias(length(net.Layers(2).Bias)/4+1:length(net.Layers(2).Bias)*2/4,:);
-    b_c  = net.Layers(2).Bias(length(net.Layers(2).Bias)*2/4+1:length(net.Layers(2).Bias)*3/4,:);
-    b_o  = net.Layers(2).Bias(length(net.Layers(2).Bias)*3/4+1:length(net.Layers(2).Bias)*4/4,:);
-    
-    W1 = net.Layers(3).Weights;
-    b1 = net.Layers(3).Bias;
-    
-    learning_rate = 0.01;
-    step = 1;
-    
-    learn_cnt = 0;
-    
     
     lastsize = 0;
     for i = 1:step:size(cnt_c,2)-100

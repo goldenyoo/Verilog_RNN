@@ -19,22 +19,26 @@ load(FILENAME);
 idx = randperm(size(X,3));
 train_it = 1;
 dev_it = 1;
+test_it = 1;
 
 for k = 1: size(X,3)
-    if k < size(X,3)*0.9
+    if k < size(X,3)*0.8
         XTrain{train_it,1} = X(:,:,idx(k));
         YTrain(train_it,1) = Y(idx(k));
         train_it = train_it + 1;
-    else 
+    elseif k < size(X,3)*0.9
         XValidation{dev_it,1} = X(:,:,idx(k));
         YValidation(dev_it,1) = Y(idx(k));
         dev_it = dev_it + 1;
- 
+    else
+        XTest{test_it,1} = X(:,:,idx(k));
+        YTest(test_it,1) = Y(idx(k));
+        test_it = test_it + 1;
     end
 end
 YTrain = categorical(YTrain);
 YValidation = categorical(YValidation);
-
+YTest = categorical(YTest);
 %% 
 
 layers = [
@@ -57,6 +61,9 @@ options = trainingOptions('adam', ...
 
 net = trainNetwork(XTrain,YTrain,layers,options);
 
+YPred = classify(net,XTest,'SequenceLength','longest');
 
+acc = sum(YPred == YTest)./numel(YTest);
+disp(sprintf('Score: %f  ',acc));
  %% 
-save("D:\바탕화면\Verilog RNN\my_git_folder\1a\net.mat",'net');
+% save("D:\바탕화면\Verilog RNN\my_git_folder\1a\net.mat",'net');
