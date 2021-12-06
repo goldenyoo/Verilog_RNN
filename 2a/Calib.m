@@ -20,7 +20,12 @@ c4 = 0;
 for data_label = data_labels
     
     FILENAME = strcat('D:\바탕화면\BCIIV_2a_mat\A0',data_label,'T_2_mat');
+    load(FILENAME, 'h');
+    
+    FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\2a\ICA_A0',data_label,'T.mat');
     load(FILENAME);
+
+    s = ALLEEG(2).data';
 
 
     %% Calculate covariance for all Classes

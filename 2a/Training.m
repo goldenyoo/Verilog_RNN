@@ -40,7 +40,8 @@ m = 16;
 layers = [
     sequenceInputLayer(10,"Name","sequence")
     lstmLayer(16,"Name","lstm","OutputMode","last")
-    fullyConnectedLayer(2,"Name","fc")
+    fullyConnectedLayer(10,"Name","fc")
+    fullyConnectedLayer(2,"Name","fc1")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
 
