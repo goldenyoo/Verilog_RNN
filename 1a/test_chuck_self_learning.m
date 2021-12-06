@@ -26,7 +26,7 @@ ref = 33;
 data_label = 'a';   
 
 %%
-FILENAME = strcat('D:\바탕화면\Verilog RNN\new\11_30\eeglab\eval_',data_label,'.mat');
+FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\1a\eval_',data_label,'.mat');
 load(FILENAME);
 
 cnt = ALLEEG(4).data;

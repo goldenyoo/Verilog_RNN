@@ -11,7 +11,7 @@ clc
 close all
 clear all
 
-FILENAME = 'D:\바탕화면\Verilog RNN\new\11_30\eeglab\BCIIV_1a_rawdata.mat';
+FILENAME = 'D:\바탕화면\Verilog RNN\my_git_folder\1a\BCIIV_1a_rawdata.mat';
 load(FILENAME);
 
 %% Train, Validation
@@ -46,7 +46,7 @@ layers = [
 
 
 
-options = trainingOptions('rmsprop', ...
+options = trainingOptions('adam', ...
     'ExecutionEnvironment','auto', ...
     'LearnRateSchedule','piecewise', ...
     'MaxEpochs',30, ...
@@ -59,4 +59,4 @@ net = trainNetwork(XTrain,YTrain,layers,options);
 
 
  %% 
-save("D:\바탕화면\Verilog RNN\new\11_30\eeglab\net.mat",'net');
+save("D:\바탕화면\Verilog RNN\my_git_folder\1a\net.mat",'net');
