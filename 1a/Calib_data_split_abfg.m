@@ -27,8 +27,8 @@ itt = 1;
 chunk = 100-1;
 fs = 100;
 
-data_labels = ['a' 'b' 'f' 'g'];
-% data_labels = ['a'];
+% data_labels = ['a' 'b' 'f' 'g'];
+data_labels = ['a'];
 
 for data_label = data_labels
 
@@ -37,22 +37,18 @@ for data_label = data_labels
 
     % Data rescale
 %     cnt = ALLEEG(4).data;
-    cnt= double(cnt);
+    cnt= 0.1*double(cnt);
     cnt = cnt';
 %     cnt_c = cnt([27 29 31 44-1 46-1 50-1 52-1 54-1],:); % Exclude electrode (AF3, AF4, O1, O2, PO1, PO2)     
     
     cnt_c = cnt([27 29 31 44 46 50 52 54],:);
 
     clear cnt  
-    
-    FILENAME = strcat('D:\바탕화면\Motor Imagery EEG data\BCICIV_1_mat\BCICIV_calib_ds1',data_label,'.mat');
-    load(FILENAME);
-    
-    
+        
     
     for i = 1:length(mrk.pos)
 %         fprintf("pos: %d\n",i);
-        for k = 0       
+        for k = 0:step:300       
             if mod(k,100) == 0
 %                 fprintf("step: %d",k);
             end
@@ -70,7 +66,7 @@ for data_label = data_labels
             end
             it = it + 1;
         end
-        for k = 0
+        for k = 0:step:300
              E = cnt_c(:,mrk.pos(1,i)+400+k:mrk.pos(1,i)+400+chunk+k);
          
              X(:,:,it) = E;
