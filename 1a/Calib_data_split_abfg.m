@@ -28,24 +28,24 @@ chunk = 100-1;
 fs = 100;
 
 % data_labels = ['a' 'b' 'f' 'g'];
-data_labels = ['f'];
+data_labels = ['b'];
 
 for data_label = data_labels
 
     FILENAME = strcat('D:\바탕화면\Motor Imagery EEG data\BCICIV_1_mat\BCICIV_calib_ds1',data_label,'.mat');
     load(FILENAME);
-    clear cnt nfo 
-    FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\1a\eeglab_ICA_data_',data_label,'.mat');
-    load(FILENAME);
+%     clear cnt nfo 
+%     FILENAME = strcat('D:\바탕화면\Verilog RNN\my_git_folder\1a\eeglab_ICA_data_',data_label,'.mat');
+%     load(FILENAME);
     
     % Data rescale
-    cnt = ALLEEG(3).data;
+%     cnt = ALLEEG(4).data;
 
-%     cnt= 0.1*double(cnt);
-%     cnt = cnt';
+    cnt= 0.1*double(cnt);
+    cnt = cnt';
    
-    cnt_c = cnt([27 29 31 44-1 46-1 50-1 52-1 54-1],:); 
-%     cnt_c = cnt([27 29 31 44 46 50 52 54],:);
+%     cnt_c = cnt([27 29 31 44-1 46-1 50-1 52-1 54-1],:); 
+    cnt_c = cnt([27 29 31 44 46 50 52 54],:);
 
     clear cnt  
         
