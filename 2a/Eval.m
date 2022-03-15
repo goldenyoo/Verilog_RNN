@@ -172,8 +172,8 @@ for i = 1:length(XTest)
     end
     
     % Backpropagation
-%     if (i < 50) %&& ( YTest(i,1) ~= categorical(ypred(i,1)))
-    if ( YTest(i,1) ~= categorical(ypred(i,1)) )
+    if (i < 50) && ( YTest(i,1) ~= categorical(ypred(i,1)) )
+%     if ( YTest(i,1) ~= categorical(ypred(i,1)) )
         back_cnt = back_cnt + 1;
         
         if YTest(i,1) == categorical(1)
@@ -240,7 +240,8 @@ for i = 1:length(XTest)
             db_o = db_o + ddb_o;
         end
     end    
-    if back_cnt >= 10
+%     if back_cnt >= 10
+    if (50<= i) && (i < 51)    
         learning_rate = 0.01;
         % Update
         W3 = W3 - learning_rate* (dW3/back_cnt); %0.1
@@ -268,7 +269,7 @@ for i = 1:length(XTest)
         b_c = b_c - learning_rate* (db_c/back_cnt);
         b_o = b_o - learning_rate* (db_o/back_cnt);
         
-        back_cnt = 0;
+%         back_cnt = 0;
         
         dW3 = 0; db3 = 0;
         dW2 = 0; db2 = 0;
