@@ -241,32 +241,32 @@ for i = 1:length(XTest)
         end
     end    
     if back_cnt >= 10
-        learning_rate = 1;
+        learning_rate = 0.01;
         % Update
-        W3 = W3 - 0.1* (dW3/back_cnt); %0.1
-        b3 = b3 - 0.1* (db3/back_cnt); %0.1
+        W3 = W3 - learning_rate* (dW3/back_cnt); %0.1
+        b3 = b3 - learning_rate* (db3/back_cnt); %0.1
         
-        W2 = W2 - 0.1* (dW2/back_cnt); % 1 or 0.1
-        b2 = b2 - 0.1* (db2/back_cnt); % 1 or 0.1
+        W2 = W2 - learning_rate* (dW2/back_cnt); % 1 or 0.1
+        b2 = b2 - learning_rate* (db2/back_cnt); % 1 or 0.1
         
-        W1 = W1 - 0.1* (dW1/back_cnt); % 1 or 0.1 ?
-        b1 = b1 - 0.1* (db1/back_cnt); % 1 or 0.1
+        W1 = W1 - learning_rate* (dW1/back_cnt); % 1 or 0.1 ?
+        b1 = b1 - learning_rate* (db1/back_cnt); % 1 or 0.1
         
         %Update
-        W_ux = W_ux - 1* (dW_ux/back_cnt); % 1 or 10?
-        W_fx = W_fx - 1* (dW_fx/back_cnt);
-        W_cx = W_cx - 1* (dW_cx/back_cnt);
-        W_ox = W_ox - 1* (dW_ox/back_cnt);
+        W_ux = W_ux - learning_rate* (dW_ux/back_cnt); % 1 or 10?
+        W_fx = W_fx - learning_rate* (dW_fx/back_cnt);
+        W_cx = W_cx - learning_rate* (dW_cx/back_cnt);
+        W_ox = W_ox - learning_rate* (dW_ox/back_cnt);
         
-        W_ua = W_ua - 1* (dW_ua/back_cnt); % 1 or 10?
-        W_fa = W_fa - 1* (dW_fa/back_cnt);
-        W_ca = W_ca - 1* (dW_ca/back_cnt);
-        W_oa = W_oa - 1* (dW_oa/back_cnt);
+        W_ua = W_ua - learning_rate* (dW_ua/back_cnt); % 1 or 10?
+        W_fa = W_fa - learning_rate* (dW_fa/back_cnt);
+        W_ca = W_ca - learning_rate* (dW_ca/back_cnt);
+        W_oa = W_oa - learning_rate* (dW_oa/back_cnt);
         
-        b_u = b_u - 1* (db_u/back_cnt);
-        b_f = b_f - 1* (db_f/back_cnt);
-        b_c = b_c - 1* (db_c/back_cnt);
-        b_o = b_o - 1* (db_o/back_cnt);
+        b_u = b_u - learning_rate* (db_u/back_cnt);
+        b_f = b_f - learning_rate* (db_f/back_cnt);
+        b_c = b_c - learning_rate* (db_c/back_cnt);
+        b_o = b_o - learning_rate* (db_o/back_cnt);
         
         back_cnt = 0;
         
@@ -286,8 +286,8 @@ YPred = categorical(ypred);
 
 YPred_net = classify(net,XTest,'SequenceLength','longest');
 
-acc_net = sum(YPred_net(50:end) == YTest(50:end))./numel(YTest(50:end));
-acc = sum(YPred(50:end) == YTest(50:end))./numel(YTest(50:end));
+acc_net = sum(YPred_net(1:end) == YTest(1:end))./numel(YTest(1:end));
+acc = sum(YPred(1:end) == YTest(1:end))./numel(YTest(1:end));
 
 fprintf('original net: %f  \n',acc_net);
 fprintf('backpropagation: %f  \n',acc);
