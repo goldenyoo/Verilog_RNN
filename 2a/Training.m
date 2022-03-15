@@ -32,9 +32,17 @@ YValidation = categorical(YValidation);
 layers = [
     sequenceInputLayer(22,"Name","sequence")
     lstmLayer(314,"Name","lstm","OutputMode","last")
-    fullyConnectedLayer(2,"Name","fc")
+    fullyConnectedLayer(240,"Name","fc_2")
+    reluLayer("Name","relu_1")
+    dropoutLayer(0.5,"Name","dropout_1")
+    fullyConnectedLayer(50,"Name","fc_3")
+    reluLayer("Name","relu_2")
+    dropoutLayer(0.5,"Name","dropout_2")
+    fullyConnectedLayer(2,"Name","fc_1")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
+
+
 
 layers(2).CellState = ones(314,1);
 layers(2).HiddenState= ones(314,1);
